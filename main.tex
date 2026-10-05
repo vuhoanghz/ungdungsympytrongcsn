@@ -1,0 +1,1549 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\usepackage{upquote}
+\usepackage{microtype}
+
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+
+\usepackage[a4paper,margin=2.4cm]{geometry}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{needspace}
+\usepackage{float}
+\definecolor{maintext}{RGB}{0,0,0} 
+
+\definecolor{codebg}{RGB}{246,248,250}
+\definecolor{codeframe}{RGB}{210,214,220}
+\definecolor{kw}{RGB}{0,92,197}
+\definecolor{str}{RGB}{163,21,21}
+\definecolor{cmt}{RGB}{106,115,125}
+\definecolor{num}{RGB}{0,110,90}
+\definecolor{boxinfo}{RGB}{235,246,255}
+\definecolor{boxinfoframe}{RGB}{84,150,220}
+\definecolor{boxwarn}{RGB}{255,244,229}
+\definecolor{boxwarnframe}{RGB}{214,140,40}
+\definecolor{boxtip}{RGB}{234,250,240}
+\definecolor{boxtipframe}{RGB}{50,160,90}
+\definecolor{boxex}{RGB}{247,240,255}
+\definecolor{boxexframe}{RGB}{130,80,200}
+\definecolor{titleblue}{RGB}{20,60,110}
+
+
+\titleformat{\chapter}[display]
+  {\normalfont\Large\bfseries\color{titleblue}}
+  {\filright\Large Chương \thechapter}
+  {0.6em}{\Large\bfseries}
+\titlespacing*{\chapter}{0pt}{20pt}{20pt}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{titleblue}}
+  {\thesection}{0.6em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{titleblue!80!black}}
+  {\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries\color{titleblue!70!black}}
+  {\thesubsubsection}{0.6em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\lhead{\small\textit{SymPy \& Cấp số nhân}}
+\rhead{\small\thepage}
+
+
+\lstdefinelanguage{PythonPlus}[]{Python}{
+  morekeywords=[2]{sympy, symbols, Eq, solve, nonlinsolve, solveset, limit, oo,
+                    simplify, subs, evalf, Rational, init_printing, latex,
+                    lambdify, plot, expand, factor, nsimplify, sqrt, Abs, S,
+                    SymPy, sin, cos, pi, E, ln, exp, log},
+  keywordstyle=[2]\color{num}\bfseries,
+}
+
+\lstset{
+  language=PythonPlus,
+  backgroundcolor=\color{codebg},
+  rulecolor=\color{codeframe},
+  frame=single,
+  framesep=6pt,
+  framerule=0.6pt,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{kw}\bfseries,
+  stringstyle=\color{str},
+  commentstyle=\color{cmt}\itshape,
+  numbers=left,
+  numberstyle=\tiny\color{cmt},
+  numbersep=8pt,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=false,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}, % Ngắt dòng đẹp
+  tabsize=4,
+  columns=flexible,
+  xleftmargin=1em,
+  xrightmargin=0.3em,
+  aboveskip=8pt,
+  belowskip=8pt,
+  captionpos=b,
+}
+
+\lstdefinestyle{outstyle}{
+  backgroundcolor=\color{white},
+  rulecolor=\color{codeframe},
+  frame=single,
+  framesep=6pt,
+  basicstyle=\ttfamily\small\color{black!75},
+  breaklines=true,
+  numbers=none,
+  xleftmargin=1em,
+}
+
+
+\newtcolorbox{infobox}[1][]{
+  colback=boxinfo, colframe=boxinfoframe, boxrule=0.6pt, arc=2pt,
+  left=7pt, right=7pt, top=5pt, bottom=5pt,
+  title={Giải thích thêm}, fonttitle=\bfseries\small,
+  coltitle=boxinfoframe!40!black, #1
+}
+\newtcolorbox{warnbox}[1][]{
+  colback=boxwarn, colframe=boxwarnframe, boxrule=0.6pt, arc=2pt,
+  left=7pt, right=7pt, top=5pt, bottom=5pt,
+  title={Lưu ý / Lỗi thường gặp}, fonttitle=\bfseries\small,
+  coltitle=boxwarnframe!30!black, #1
+}
+\newtcolorbox{tipbox}[1][]{
+  colback=boxtip, colframe=boxtipframe, boxrule=0.6pt, arc=2pt,
+  left=7pt, right=7pt, top=5pt, bottom=5pt,
+  title={Mẹo thực hành}, fonttitle=\bfseries\small,
+  coltitle=boxtipframe!30!black, #1
+}
+\newtcolorbox{exbox}[1][]{
+  colback=boxex, colframe=boxexframe, boxrule=0.6pt, arc=2pt,
+  left=7pt, right=7pt, top=5pt, bottom=5pt,
+  title={Bài tập tự luyện}, fonttitle=\bfseries\small,
+  coltitle=boxexframe!30!black, #1
+}
+\newtcolorbox{syntaxbox}[2][]{
+  enhanced, colback=white, colframe=titleblue!60!black,
+  boxrule=0.6pt, arc=2pt, left=7pt, right=7pt, top=5pt, bottom=5pt,
+  title={Cú pháp: \texttt{#2}}, fonttitle=\bfseries\ttfamily\small,
+  coltitle=white, colbacktitle=titleblue!70!black, #1
+}
+
+\newcommand{\pycmd}[1]{\texttt{\color{kw}#1}}
+\newcommand{\file}[1]{\texttt{#1}}
+
+\setlist[itemize]{leftmargin=1.4em, itemsep=2pt, topsep=3pt}
+\setlist[enumerate]{leftmargin=1.6em, itemsep=3pt, topsep=3pt}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=titleblue,
+  urlcolor=blue!60!black,
+  citecolor=titleblue,
+}
+
+
+\title{\textbf{\color{titleblue}Hướng dẫn sử dụng SymPy \\ để giải các bài toán Cấp số nhân}\\[0.4em]}
+\author{Sinh viên thực hiện}
+\date{\today}
+
+
+\begin{document}
+\color{maintext} 
+
+\begin{titlepage}
+    \centering
+    
+    \vspace*{0.1cm}
+    {\large \textbf{TRƯỜNG ĐẠI HỌC SƯ PHẠM -- ĐẠI HỌC HUẾ}} \\[0.2cm]
+    {\large \textbf{KHOA TOÁN HỌC}}
+    
+    \vfill
+    
+    
+        \includegraphics[width=4cm]{307101407_585748093337109_1610541625467017855_n.jpg}
+    
+    
+    \vfill
+    
+    
+    {\Large \textbf{HƯỚNG DẪN SỬ DỤNG SYMPY TRONG GIẢI QUYẾT CÁC VẤN ĐỀ CẤP SỐ NHÂN}}
+    
+    \vfill
+    
+    \begin{flushleft}
+        \hspace{3.5cm} 
+        \renewcommand{\arraystretch}{1.3} 
+        \begin{tabular}{l @{\hspace{0.3cm}} c @{\hspace{0.3cm}} l}
+            \textbf{Sinh viên thực hiện} & : & Trần Hoàng Vũ \\
+            \textbf{Mã sinh viên} & : & 23S7010010 \\
+            \textbf{Lớp} & : & 231012T \\
+            \textbf{Khoá} & : & 2023 -- 2027 \\
+            \textbf{Giảng viên hướng dẫn} & : & Nguyễn Đăng Minh Phúc \\
+        \end{tabular}
+    \end{flushleft}
+    
+    \vfill
+    
+    {\textbf{Thành phố Huế, tháng 9 năm 2026}}
+    \vspace*{0.5cm}
+    
+\end{titlepage}
+
+
+
+\newpage
+\tableofcontents
+\newpage
+
+
+\chapter*{Mở đầu: Đặt vấn đề và cơ sở lý thuyết}
+\addcontentsline{toc}{chapter}{Mở đầu: Đặt vấn đề và cơ sở lý thuyết}
+
+\section*{0.1. Nhắc lại lý thuyết Cấp số nhân}
+\addcontentsline{toc}{section}{0.1. Nhắc lại lý thuyết Cấp số nhân}
+
+Một dãy số $(u_n)$ được gọi là \textbf{cấp số nhân} nếu kể từ số hạng
+thứ hai, mỗi số hạng đều bằng số hạng đứng ngay trước nó nhân với một
+số không đổi $q$ (gọi là \textbf{công bội}):
+\[
+u_{n+1} = u_n \cdot q, \qquad \forall n \geq 1.
+\]
+
+Các đại lượng cơ bản cần nhớ:
+
+\begin{itemize}
+  \item $u_1$: số hạng đầu tiên của dãy.
+  \item $q$: công bội (tỉ số giữa hai số hạng liên tiếp, $q \neq 0$).
+  \item \textbf{Số hạng tổng quát:}
+  \[
+  u_n = u_1 \cdot q^{\,n-1}.
+  \]
+  \item \textbf{Tính chất ba số hạng liên tiếp:}
+  $u_k^2 = u_{k-1} \cdot u_{k+1}$ (với $k \geq 2$).
+  \item \textbf{Tổng $n$ số hạng đầu tiên} $S_n = u_1 + u_2 + \dots + u_n$:
+  \[
+  S_n =
+  \begin{cases}
+    n \cdot u_1, & \text{nếu } q = 1,\\[4pt]
+    u_1 \cdot \dfrac{1 - q^n}{1 - q}, & \text{nếu } q \neq 1.
+  \end{cases}
+  \]
+  \item \textbf{Cấp số nhân lùi vô hạn:} khi $|q| < 1$ và $n \to \infty$,
+  tổng $S_n$ tiến tới một giá trị hữu hạn:
+  \[
+  S = \lim_{n \to \infty} S_n = \frac{u_1}{1 - q}.
+  \]
+\end{itemize}
+
+\begin{infobox}
+Bốn ``khối kiến thức'' toàn bộ tài liệu sẽ xoay quanh: \emph{số hạng đầu
+$u_1$}, \emph{công bội $q$}, \emph{số hạng tổng quát $u_n$}, và
+\emph{tổng $S_n$ (hoặc $S$ khi lùi vô hạn)}. SymPy sẽ giúp ta thao tác
+với các công thức này như những \textbf{biểu thức đại số biết suy luận},
+thay vì chỉ là những con số cụ thể.
+\end{infobox}
+
+\section*{0.2. SymPy là gì? Vì sao dùng SymPy để giải toán?}
+\addcontentsline{toc}{section}{0.2. SymPy là gì? Vì sao dùng SymPy?}
+
+\textbf{SymPy} là một thư viện \textbf{Toán học ký hiệu} (Symbolic
+Mathematics) viết bằng Python, thuộc nhóm phần mềm gọi là \textbf{CAS}
+(\emph{Computer Algebra System} -- Hệ thống đại số máy tính).
+
+Khác biệt cốt lõi so với tính toán số học thông thường:
+
+\begin{center}
+\begin{tabular}{@{}p{0.46\textwidth}p{0.46\textwidth}@{}}
+\toprule
+\textbf{Số học (numeric)} & \textbf{Ký hiệu (SymPy)}\\
+\midrule
+Biến phải gán một giá trị số cụ thể, ví dụ \texttt{q = 0.5}. &
+Biến có thể là một \textbf{ký hiệu trừu tượng} $q$, chưa cần biết giá trị.\\[4pt]
+Kết quả là số gần đúng, có thể mất chính xác (sai số làm tròn). &
+Kết quả là biểu thức \textbf{chính xác tuyệt đối} (phân số, căn thức, $\pi$, \dots).\\[4pt]
+Muốn đổi bài toán phải viết lại công thức tính bằng tay. &
+Có thể \textbf{giải phương trình, rút gọn, lấy giới hạn} ngay trên biểu thức.\\[4pt]
+Phù hợp tính số liệu lớn, xử lý ảnh, mô phỏng. &
+Phù hợp giải toán đại số, chứng minh công thức, kiểm tra đáp án.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Nói cách khác, với SymPy ta có thể gõ đúng công thức toán học
+$u_n = u_1 q^{n-1}$ vào Python gần như y hệt cách viết trên giấy, rồi
+nhờ máy tính thay số, giải phương trình, hoặc rút gọn giúp mình -- giảm
+tối đa sai sót tính tay.
+
+\begin{tipbox}
+Tài liệu dùng \textbf{Jupyter Notebook} làm môi trường thực hành (theo
+đúng định dạng đã thống nhất trong kế hoạch dự án), vì Notebook cho
+phép xen kẽ giữa \emph{lý thuyết trình bày bằng Markdown/LaTeX} và
+\emph{mã Python chạy thử ngay lập tức}. Tuy nhiên mọi đoạn mã trong tài
+liệu đều chạy được y hệt nếu bạn dùng file \texttt{.py} thông thường.
+\end{tipbox}
+
+\section*{0.3. Lộ trình tài liệu}
+\addcontentsline{toc}{section}{0.3. Lộ trình tài liệu}
+
+Tài liệu gồm 9 chương, độ khó tăng dần:
+
+\begin{center}
+\begin{tabular}{@{}cl@{}}
+\toprule
+\textbf{Chương} & \textbf{Nội dung}\\
+\midrule
+1 & Cài đặt môi trường, khai báo biến ký hiệu, in đẹp\\
+2 & Các lệnh SymPy cơ bản: \texttt{subs}, \texttt{evalf}, \texttt{simplify}\\
+3 & Dịch công thức CSN sang SymPy (\texttt{Eq}, \texttt{solve})\\
+4 & Dạng 1: Tính số hạng và tổng khi biết $u_1, q$\\
+5 & Dạng 2: Giải hệ phương trình tìm $u_1, q$, lọc nghiệm\\
+6 & Dạng 3: Cấp số nhân lùi vô hạn với \texttt{limit()}\\
+7 & Ứng dụng thực tế: lãi kép, vi khuẩn, dân số\\
+8 & Trực quan hóa bằng \texttt{matplotlib} + \texttt{lambdify}\\
+9 & Đóng gói module \texttt{solver.py} và kiểm thử\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\newpage
+
+% =====================================================================
+\chapter{Cài đặt môi trường và khai báo biến ký hiệu}
+
+\section{Cài đặt môi trường làm việc}
+
+\textbf{Yêu cầu hệ thống:} Python phiên bản 3.9 trở lên.
+
+Mở cửa sổ dòng lệnh (Terminal / Command Prompt) và cài ba thư viện cần
+thiết:
+
+\begin{lstlisting}[language=bash,caption={Cài đặt thư viện qua pip},numbers=none]
+pip install sympy jupyter matplotlib
+\end{lstlisting}
+
+\begin{itemize}
+  \item \pycmd{sympy}: thư viện toán học ký hiệu -- trung tâm tài liệu.
+  \item \pycmd{jupyter}: môi trường Notebook tương tác.
+  \item \pycmd{matplotlib}: thư viện vẽ đồ thị (dùng ở Chương 8).
+\end{itemize}
+
+Khởi động Jupyter Notebook:
+
+\begin{lstlisting}[language=bash,numbers=none]
+jupyter notebook
+\end{lstlisting}
+
+\begin{tipbox}
+Kiểm tra SymPy đã cài đúng chưa bằng đoạn code sau. Nếu in ra số phiên
+bản (không báo lỗi) là thành công:
+
+\begin{lstlisting}
+import sympy as sp
+print(sp.__version__)   # e.g. 1.12
+\end{lstlisting}
+\end{tipbox}
+
+\section{Nạp thư viện và quy ước đặt tên}
+
+\begin{lstlisting}
+import sympy as sp
+\end{lstlisting}
+
+\begin{syntaxbox}{import tên\_thư\_viện as bí\_danh}
+\pycmd{import sympy as sp} nghĩa là: nạp toàn bộ thư viện
+\texttt{sympy}, từ giờ gọi tắt bằng tên \texttt{sp}. Nhờ vậy thay vì gõ
+\texttt{sympy.symbols(...)} dài dòng, ta chỉ cần
+\texttt{sp.symbols(...)}. Đây là quy ước phổ biến trong cộng đồng
+SymPy, tương tự \texttt{import numpy as np} hay
+\texttt{import pandas as pd}.
+\end{syntaxbox}
+
+\begin{warnbox}
+Nếu Python báo \texttt{ModuleNotFoundError: No module named 'sympy'},
+nghĩa là bước cài đặt chưa thành công hoặc bạn đang chạy nhầm môi
+trường Python. Hãy chạy lại \texttt{pip install sympy} trong đúng
+terminal mà Jupyter đang sử dụng.
+\end{warnbox}
+
+Quy ước tên biến Python (bám sát sách giáo khoa Việt Nam):
+
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Toán học} & \textbf{Biến Python} & \textbf{Ý nghĩa} & \textbf{Ví dụ}\\
+\midrule
+$u_1$ & \texttt{u1} & số hạng đầu & \texttt{u1 = 3}\\
+$q$ & \texttt{q} & công bội & \texttt{q = 2}\\
+$n$ & \texttt{n} & chỉ số/số thứ tự & \texttt{n = 5}\\
+$u_n$ & \texttt{un} & số hạng tổng quát & \texttt{un = u1*q**(n-1)}\\
+$S_n$ & \texttt{Sn} & tổng $n$ số hạng đầu & \texttt{Sn = ...}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Khai báo biến ký hiệu với \texttt{symbols()}}
+
+\begin{syntaxbox}{sp.symbols('tên1 tên2 ...')}
+Hàm \pycmd{symbols()} tạo ra các \textbf{đối tượng ký hiệu toán học}
+(\texttt{Symbol}) -- những cái tên đại diện cho một đại lượng \emph{chưa
+biết giá trị}, giống hệt cách ta viết $x$, $q$, $n$ trên giấy mà không
+cần biết chúng bằng bao nhiêu.
+\end{syntaxbox}
+
+\begin{lstlisting}[caption={Khai báo các biến của bài toán cấp số nhân}]
+import sympy as sp
+
+# Declare symbolic variables used for geometric progression
+u1, q, n = sp.symbols('u1 q n')
+
+print(u1, q, n)
+print(type(u1))
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,caption={Kết quả in ra}]
+u1 q n
+<class 'sympy.core.symbol.Symbol'>
+\end{lstlisting}
+
+\begin{infobox}
+Chú ý sự khác nhau giữa \emph{tên biến Python} (\texttt{u1}) và
+\emph{chuỗi ký tự} trong \texttt{symbols('u1 q n')}. Dòng lệnh
+\texttt{u1, q, n = sp.symbols('u1 q n')} làm \textbf{hai việc cùng lúc}:
+(1) yêu cầu SymPy tạo ba ký hiệu có tên hiển thị \texttt{"u1"},
+\texttt{"q"}, \texttt{"n"}; (2) gán chúng cho ba biến Python cùng tên để
+thao tác trong code. Tên biến Python và tên hiển thị không bắt buộc
+phải trùng nhau (ví dụ \texttt{a = sp.symbols('u1')} vẫn hợp lệ), nhưng
+đặt trùng tên giúp code dễ đọc hơn.
+\end{infobox}
+
+Một số biến thể hữu ích:
+
+\begin{lstlisting}[caption={Các cách khai báo biến khác nhau}]
+# Style 1: multiple symbols in one string, space-separated
+a, b, c = sp.symbols('a b c')
+
+# Style 2: comma-separated string -- same result
+a, b, c = sp.symbols('a, b, c')
+
+# Style 3: generate indexed symbols u1, u2, ..., u5
+u = sp.symbols('u1:6')   # produces (u1, u2, u3, u4, u5)
+print(u)
+
+# Style 4: constrain domain -- useful for progressions
+# q real, q nonzero (geometric ratio must not be zero)
+q = sp.symbols('q', real=True, nonzero=True)
+n = sp.symbols('n', positive=True, integer=True)
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,numbers=none]
+(u1, u2, u3, u4, u5)
+\end{lstlisting}
+
+\begin{warnbox}
+Khai báo thêm \texttt{real=True} (số thực), \texttt{positive=True}
+(dương), \texttt{integer=True} (số nguyên), \texttt{nonzero=True}
+(khác 0) \textbf{không bắt buộc}, nhưng \textbf{rất nên làm} với bài
+toán cấp số nhân: vì $q$ phải khác 0 theo định nghĩa, và $n$ luôn là
+số nguyên dương. Nếu bỏ qua, khi giải phương trình bậc cao SymPy có
+thể trả về thêm nghiệm phức hoặc nghiệm âm không phù hợp ngữ cảnh.
+\end{warnbox}
+
+\section{Định dạng hiển thị đẹp với \texttt{init\_printing()}}
+
+\begin{syntaxbox}{sp.init\_printing()}
+Bật chế độ hiển thị công thức toán học dưới dạng \textbf{đẹp}
+(Unicode hoặc LaTeX-style). Chỉ cần gọi \textbf{một lần} ở đầu
+Notebook, mọi kết quả in ra sau đó sẽ tự động được định dạng.
+\end{syntaxbox}
+
+\begin{lstlisting}[caption={Bật chế độ in đẹp}]
+import sympy as sp
+sp.init_printing()   # enable pretty-print for entire notebook
+
+u1, q, n = sp.symbols('u1 q n', real=True)
+bieu_thuc = u1 * q**(n - 1)
+bieu_thuc   # in Jupyter: shown as mathematical formula
+\end{lstlisting}
+
+Khi chạy trong Jupyter, ô kết quả hiển thị:
+\[
+u_1 \cdot q^{\,n-1}
+\]
+thay vì chuỗi thô \texttt{u1*q**(n - 1)}.
+
+\begin{infobox}
+Nếu không dùng Jupyter (chạy file \texttt{.py} thường qua terminal),
+\texttt{init\_printing()} sẽ tự chuyển sang hiển thị bằng ký tự Unicode
+thay vì công thức đồ họa, nhưng vẫn dễ đọc hơn nhiều so với mặc định.
+\end{infobox}
+
+\section{Thiết lập công thức CSN dưới dạng SymPy}
+
+\begin{lstlisting}[caption={Biểu thức số hạng tổng quát và tổng $S_n$}]
+import sympy as sp
+sp.init_printing()
+
+u1, q, n = sp.symbols('u1 q n', real=True)
+
+# General term: u_n = u1 * q^(n-1)
+un_formula = u1 * q**(n - 1)
+
+# Sum of n terms (case q != 1):
+# S_n = u1 * (1 - q**n) / (1 - q)
+Sn_formula = u1 * (1 - q**n) / (1 - q)
+
+print("Formula u_n:", un_formula)
+print("Formula S_n:", Sn_formula)
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,caption={Kết quả in ra}]
+Formula u_n: u1*q**(n - 1)
+Formula S_n: u1*(1 - q**n)/(1 - q)
+\end{lstlisting}
+
+\begin{tipbox}
+Từ đây trở đi, \texttt{un\_formula} và \texttt{Sn\_formula} không phải
+là những con số cố định, mà là ``khuôn công thức'' sống động: bạn có
+thể thay số vào (Chương 4), gộp với một phương trình khác để giải hệ
+(Chương 5), hoặc lấy giới hạn khi $n \to \infty$ (Chương 6) -- tất cả
+chỉ với vài dòng lệnh.
+\end{tipbox}
+
+\begin{exbox}
+\textbf{Bài tập 1.1.} Khai báo các biến ký hiệu $a, r, m$ và tạo biểu
+thức $T_m = a \cdot r^m$.\\[2pt]
+\textbf{Bài tập 1.2.} Khai báo biến $k$ là số nguyên dương và $p$ là số
+thực dương. In ra biểu thức $p^k$.\\[2pt]
+\textbf{Bài tập 1.3.} Dùng \texttt{symbols} tạo một lượt các biến
+$v_1, v_2, \ldots, v_8$ (gợi ý: cú pháp \texttt{'v1:9'}).
+\end{exbox}
+
+\newpage
+
+% =====================================================================
+\chapter{Các lệnh SymPy cơ bản}
+
+Chương này giới thiệu từng lệnh SymPy riêng lẻ -- là ``viên gạch'' xây
+nên mọi lời giải cho bài toán cấp số nhân ở các chương sau.
+
+\section{Thay giá trị -- \texttt{.subs()}}
+
+\begin{syntaxbox}{bieu\_thuc.subs(bien, gia\_tri)}
+\texttt{.subs()} (viết tắt \emph{substitute} -- thay thế) nhận vào một
+hoặc nhiều cặp ``biến -- giá trị'', trả về một biểu thức \textbf{mới}
+với biến đã được thay bằng giá trị tương ứng. Biểu thức gốc \textbf{không
+bị thay đổi} -- \texttt{.subs()} luôn trả về kết quả mới, cần gán vào
+biến khác để lưu lại.
+\end{syntaxbox}
+
+\begin{lstlisting}[caption={Thay số cho nhiều biến cùng lúc}]
+import sympy as sp
+sp.init_printing()
+
+u1, q, n = sp.symbols('u1 q n', real=True)
+un_formula = u1 * q**(n - 1)
+
+# Example: u1 = 3, q = 2, find u5
+ket_qua = un_formula.subs({u1: 3, q: 2, n: 5})
+print(ket_qua)
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,numbers=none]
+48
+\end{lstlisting}
+
+\begin{infobox}
+Cú pháp \texttt{.subs(\{u1: 3, q: 2, n: 5\})} dùng một \textbf{dictionary}
+(từ điển) của Python để thay \emph{nhiều biến cùng lúc} -- mỗi cặp
+\texttt{bien: gia\_tri} cách nhau bằng dấu phẩy. Bạn cũng có thể thay
+từng biến một bằng \texttt{.subs(u1, 3).subs(q, 2).subs(n, 5)}, kết quả
+hoàn toàn giống nhau. Cách dictionary gọn và rõ ràng hơn khi có nhiều
+biến.
+\end{infobox}
+
+\section{Chuyển sang số thực -- \texttt{.evalf()}}
+
+\begin{syntaxbox}{bieu\_thuc.evalf(so\_chu\_so)}
+\texttt{.evalf()} (evaluate as float) ép một biểu thức đã có đầy đủ giá
+trị số thành \textbf{số thập phân gần đúng}. Tham số (mặc định 15) quy
+định số chữ số có nghĩa muốn hiển thị.
+\end{syntaxbox}
+
+\begin{lstlisting}[caption={Chuyển sang số thập phân}]
+bieu_thuc = sp.sqrt(2) + sp.Rational(1, 3)
+print(bieu_thuc)             # sqrt(2) + 1/3
+print(bieu_thuc.evalf())     # 1.74754689571453
+print(bieu_thuc.evalf(20))   # 1.7475468957145320588
+\end{lstlisting}
+
+\begin{infobox}
+\pycmd{sp.Rational(1, 3)} tạo phân số chính xác $\tfrac13$ thay vì số
+thập phân xấp xỉ \texttt{0.333...}. Đây là thói quen \textbf{rất quan
+trọng} khi làm việc với SymPy: gõ \texttt{1/3} bằng cú pháp Python
+thường sẽ cho số thực gần đúng \texttt{0.3333333333333333} ngay từ đầu
+(mất chính xác); còn \texttt{sp.Rational(1, 3)} giữ nguyên phân số cho
+đến bước cuối khi bạn gọi \texttt{.evalf()}.
+\end{infobox}
+
+\section{Rút gọn, khai triển, phân tích nhân tử}
+
+\begin{lstlisting}[caption={Các lệnh biến đổi biểu thức}]
+q = sp.symbols('q', real=True)
+
+expr = (q**3 - 1) / (q - 1)
+print("simplify:", sp.simplify(expr))     # q**2 + q + 1
+print("expand:  ", sp.expand((q + 1)**3)) # q**3 + 3*q**2 + 3*q + 1
+print("factor:  ", sp.factor(q**2 - 1))   # (q - 1)*(q + 1)
+\end{lstlisting}
+
+\begin{itemize}
+  \item \pycmd{sp.simplify(expr)}: cố gắng tối giản biểu thức (dùng
+  nhiều thuật toán nội bộ).
+  \item \pycmd{sp.expand(expr)}: khai triển ngoặc.
+  \item \pycmd{sp.factor(expr)}: phân tích thành nhân tử.
+\end{itemize}
+
+\section{Phát biểu phương trình -- \texttt{Eq()}}
+
+\begin{warnbox}
+Đây là lỗi phổ biến nhất với người mới học SymPy: trong Python, dấu
+\texttt{==} chỉ dùng để \textbf{so sánh} (trả về \texttt{True}/\texttt{False}
+ngay lập tức), \textbf{không} dùng để biểu diễn một phương trình toán
+học chưa giải. Muốn viết phương trình như $u_2 + u_4 = 30$ để SymPy xử
+lý, bắt buộc phải dùng hàm \texttt{sp.Eq(ve\_trai, ve\_phai)}.
+\end{warnbox}
+
+\begin{syntaxbox}{sp.Eq(ve\_trai, ve\_phai)}
+Tạo ra một \textbf{đối tượng phương trình} (đẳng thức biểu tượng). Đối
+tượng này chưa được ``giải'' -- nó chỉ ghi lại mối quan hệ, tương tự
+việc bạn viết $u_2 + u_4 = 30$ ra giấy trước khi bắt đầu giải.
+\end{syntaxbox}
+
+\begin{lstlisting}[caption={Tạo và quan sát phương trình}]
+u1, q = sp.symbols('u1 q', real=True)
+
+pt = sp.Eq(u1 + u1*q, 6)
+print(pt)              # Eq(q*u1 + u1, 6)
+print(pt.lhs)          # q*u1 + u1  (ve trai)
+print(pt.rhs)          # 6          (ve phai)
+\end{lstlisting}
+
+\section{Giải phương trình -- \texttt{solve()}}
+
+\begin{syntaxbox}{sp.solve(pt, bien)}
+Giải phương trình \texttt{pt} theo ẩn \texttt{bien}, trả về danh sách
+các nghiệm. Với hệ nhiều phương trình, truyền vào danh sách phương
+trình và danh sách ẩn:
+\texttt{sp.solve([pt1, pt2], [x, y])}.
+\end{syntaxbox}
+
+\begin{lstlisting}[caption={Giải một phương trình}]
+u1, q = sp.symbols('u1 q', real=True)
+pt = sp.Eq(u1 + u1*q, 6)
+print(sp.solve(pt, u1))     # [6/(q + 1)]
+\end{lstlisting}
+
+\begin{exbox}
+\textbf{Bài tập 2.1.} Dùng \texttt{.subs()} tính $3 \cdot 2^9$ và
+$5 \cdot 3^{4}$.\\[2pt]
+\textbf{Bài tập 2.2.} Tính \texttt{sqrt(2) * sqrt(8)} -- kết quả ký hiệu
+là gì? Chuyển sang số thập phân bằng \texttt{.evalf()}.\\[2pt]
+\textbf{Bài tập 2.3.} Rút gọn phân thức
+$\dfrac{q^4 - 1}{q - 1}$.\\[2pt]
+\textbf{Bài tập 2.4.} Giải phương trình $q^2 - 5q + 6 = 0$.
+\end{exbox}
+
+\newpage
+
+% =====================================================================
+\chapter{Giải các dạng toán Cấp số nhân cơ bản}
+
+\section{Dạng 1 -- Tìm số hạng thứ $n$ khi biết $u_1, q$}
+
+Đây là dạng toán đơn giản nhất: đề bài đã cho sẵn $u_1$ và $q$, chỉ cần
+\textbf{thay số} vào công thức bằng \texttt{.subs()}.
+
+\begin{lstlisting}[caption={Ví dụ 1: Tìm $u_5$ khi $u_1 = 3, q = 2$}]
+import sympy as sp
+sp.init_printing()
+
+u1, q, n = sp.symbols('u1 q n', real=True)
+un_formula = u1 * q**(n - 1)
+
+# u1 = 3, q = 2, find u5
+ket_qua = un_formula.subs({u1: 3, q: 2, n: 5})
+print(ket_qua)
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,numbers=none]
+48
+\end{lstlisting}
+
+\noindent\textbf{Kiểm tra bằng tay:}
+$u_5 = 3 \cdot 2^{4} = 3 \cdot 16 = 48$. Khớp.
+
+\begin{lstlisting}[caption={Ví dụ 2: Tìm $u_{10}$ khi $u_1 = 1, q = 3$}]
+ket_qua = un_formula.subs({u1: 1, q: 3, n: 10})
+print(ket_qua)      # 19683
+\end{lstlisting}
+
+\section{Dạng 2 -- Tính tổng $S_n$ khi biết $u_1, q$}
+
+\begin{lstlisting}[caption={Ví dụ 3: Tính $S_6$ khi $u_1 = 3, q = 2$}]
+Sn_formula = u1 * (1 - q**n) / (1 - q)
+
+S6 = Sn_formula.subs({u1: 3, q: 2, n: 6})
+print(S6)
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,numbers=none]
+189
+\end{lstlisting}
+
+\noindent\textbf{Kiểm tra bằng tay:}
+$S_6 = 3 \cdot \dfrac{2^6 - 1}{2 - 1} = 3 \cdot 63 = 189$.
+
+\begin{warnbox}
+Nếu $q$ là một số \textbf{không nguyên} hoặc một \textbf{phân số}, kết
+quả \texttt{.subs()} sẽ trả về dạng \textbf{phân số chính xác} (ví dụ
+$\frac{189}{4}$) thay vì số thập phân gần đúng -- đây chính là ưu điểm
+``tính toán ký hiệu''. Muốn xem giá trị thập phân, dùng thêm
+\texttt{.evalf()}.
+\end{warnbox}
+
+\section{Ví dụ tổng hợp -- kết quả dạng phân số}
+
+\begin{lstlisting}[caption={Tính $S_{10}$ khi $u_1 = 1, q = 1/2$}]
+u1, q, n = sp.symbols('u1 q n', real=True)
+Sn_formula = u1 * (1 - q**n) / (1 - q)
+
+S10 = Sn_formula.subs({u1: 1, q: sp.Rational(1, 2), n: 10})
+print("Exact fraction:", S10)       # 1023/512
+print("Decimal (10 digits):", S10.evalf(10))  # 1.998046875
+\end{lstlisting}
+
+\section{Trường hợp đặc biệt $q = 1$}
+
+\begin{warnbox}
+Công thức $S_n = u_1 \dfrac{1-q^n}{1-q}$ chứa phép chia cho $(1 - q)$.
+Khi $q = 1$, mẫu số bằng 0 -- thay trực tiếp $q=1$ vào công thức này
+(kể cả trong SymPy) sẽ báo lỗi \texttt{ZeroDivisionError} hoặc trả về
+\texttt{zoo} (ký hiệu ``vô cùng phức'' của SymPy), \textbf{không phải}
+kết quả toán học đúng. Trường hợp $q = 1$ phải xử lý riêng bằng công
+thức $S_n = n \cdot u_1$.
+\end{warnbox}
+
+\begin{lstlisting}[caption={Hàm tính Sn có xử lý riêng trường hợp q = 1}]
+def tinh_Sn(u1_val, q_val, n_val):
+    """Compute S_n, handling the special case q = 1."""
+    if q_val == 1:
+        return n_val * u1_val
+    else:
+        u1s, qs, ns = sp.symbols('u1 q n')
+        cong_thuc = u1s * (1 - qs**ns) / (1 - qs)
+        return cong_thuc.subs({u1s: u1_val, qs: q_val, ns: n_val})
+
+print("q = 1 case:", tinh_Sn(5, 1, 10))   # 5*10 = 50
+print("q = 3 case:", tinh_Sn(5, 3, 4))    # 200
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,caption={Kết quả}]
+q = 1 case: 50
+q = 3 case: 200
+\end{lstlisting}
+
+\begin{tipbox}
+\textbf{Quy trình chuẩn cho Dạng 1:} (1) viết công thức tổng quát một
+lần bằng ký hiệu; (2) dùng \texttt{.subs()} thay số theo đề bài; (3)
+nếu cần số thập phân để báo cáo, gọi thêm \texttt{.evalf()}. Cách làm
+này giúp tái sử dụng đúng một công thức cho hàng chục bài tập khác
+nhau, chỉ đổi số liệu đầu vào.
+\end{tipbox}
+
+\begin{exbox}
+\textbf{Bài tập 3.1.} Cho CSN có $u_1 = 2$, $q = 5$. Tìm $u_7$ và
+$S_7$.\\[2pt]
+\textbf{Bài tập 3.2.} Cho $u_1 = 1$, $q = \tfrac{1}{3}$. Tính $S_{20}$
+dưới dạng phân số chính xác.\\[2pt]
+\textbf{Bài tập 3.3.} Cho $u_1 = 100$, $q = 0.98$. Tính $u_{12}$ và
+$S_{12}$ dưới dạng số thập phân (làm tròn 4 chữ số).
+\end{exbox}
+
+\newpage
+
+% =====================================================================
+\chapter{Dạng toán nâng cao -- Giải hệ phương trình tìm $u_1, q$}
+
+\section{Bài toán đặt vấn đề}
+
+Dạng toán này khó hơn: đề bài \textbf{không cho trực tiếp} $u_1$ và
+$q$, mà cho các \textbf{mối liên hệ} giữa các số hạng, ví dụ:
+\[
+\begin{cases}
+u_2 + u_4 = 30\\
+u_3 + u_5 = 90
+\end{cases}
+\]
+Yêu cầu: tìm $u_1$ và $q$. Ta cần hai công cụ: \texttt{Eq()} (đã học ở
+Chương 2) và \texttt{solve()} / \texttt{nonlinsolve()}.
+
+\section{Thiết lập hệ phương trình}
+
+\begin{lstlisting}[caption={Thiết lập hệ phương trình từ đề bài}]
+import sympy as sp
+sp.init_printing()
+
+u1, q = sp.symbols('u1 q', real=True)
+
+# Build general terms for the required indices
+u2 = u1 * q**(2 - 1)   # = u1*q
+u3 = u1 * q**(3 - 1)   # = u1*q**2
+u4 = u1 * q**(4 - 1)   # = u1*q**3
+u5 = u1 * q**(5 - 1)   # = u1*q**4
+
+# Given: u2 + u4 = 30  and  u3 + u5 = 90
+pt1 = sp.Eq(u2 + u4, 30)
+pt2 = sp.Eq(u3 + u5, 90)
+
+print(pt1)
+print(pt2)
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,caption={Kết quả}]
+Eq(u1*q + u1*q**3, 30)
+Eq(u1*q**2 + u1*q**4, 90)
+\end{lstlisting}
+
+\section{Giải hệ với \texttt{solve()}}
+
+\begin{syntaxbox}{sp.solve([pt1, pt2], [bien1, bien2])}
+Nhận vào \textbf{danh sách phương trình} (dấu ngoặc vuông) và
+\textbf{danh sách ẩn số} cần tìm, trả về danh sách các \textbf{nghiệm}
+thỏa mãn đồng thời tất cả phương trình.
+\end{syntaxbox}
+
+\begin{lstlisting}[caption={Giải hệ phương trình tìm u1, q}]
+nghiem = sp.solve([pt1, pt2], [u1, q])
+print(nghiem)
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,numbers=none]
+[(10, 3), (10/9, -3)]
+\end{lstlisting}
+
+\begin{infobox}
+Kết quả trả về là \textbf{danh sách các bộ nghiệm} (mỗi bộ trong ngoặc
+đơn, theo đúng thứ tự \texttt{[u1, q]} đã khai báo). Hệ có \textbf{hai
+bộ nghiệm}: $(u_1, q) = (10, 3)$ và $(u_1, q) = (\tfrac{10}{9}, -3)$.
+Việc phương trình bậc cao cho \emph{nhiều nghiệm} là bình thường trong
+đại số -- nhiệm vụ của người giải toán là dựa vào \textbf{điều kiện
+thực tế của đề bài} để chọn ra nghiệm phù hợp.
+\end{infobox}
+
+\section{Giải hệ với \texttt{nonlinsolve()}}
+
+\begin{syntaxbox}{sp.nonlinsolve([pt1, pt2], [bien1, bien2])}
+Tương tự \texttt{solve()}, nhưng chuyên biệt cho \textbf{hệ phương
+trình phi tuyến} (nonlinear system) -- có chứa ẩn với số mũ cao hơn 1,
+hoặc tích các ẩn. Trả về kết quả dưới dạng \texttt{FiniteSet}.
+\end{syntaxbox}
+
+\begin{lstlisting}[caption={Giải hệ bằng nonlinsolve}]
+nghiem_nonlin = sp.nonlinsolve([pt1, pt2], [u1, q])
+print(nghiem_nonlin)
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,numbers=none]
+{(10, 3), (10/9, -3)}
+\end{lstlisting}
+
+\begin{tipbox}
+\textbf{Nên dùng hàm nào?} Với hệ CSN thông thường (2 ẩn $u_1, q$), cả
+\texttt{solve()} và \texttt{nonlinsolve()} thường cho cùng kết quả --
+\texttt{solve()} có cú pháp quen thuộc, kết quả dễ duyệt (\texttt{list}
+các \texttt{tuple}). \texttt{nonlinsolve()} đáng tin cậy hơn khi hệ
+\textbf{thực sự phức tạp}. Thực hành: thử \texttt{solve()} trước, nếu
+báo không tìm được nghiệm mới chuyển sang \texttt{nonlinsolve()}.
+\end{tipbox}
+
+\section{Lọc nghiệm hợp lệ -- loại nghiệm phức}
+
+Khi phương trình tìm $q$ có bậc cao, SymPy có thể trả về cả nghiệm phức
+(chứa đơn vị ảo \texttt{sp.I}, ký hiệu $i$ với $i^2 = -1$).
+
+\begin{lstlisting}[caption={Giải phương trình bậc ba và lọc nghiệm thực}]
+q = sp.symbols('q')
+
+# Solve q**3 = 8
+pt = sp.Eq(q**3, 8)
+tat_ca_nghiem = sp.solve(pt, q)
+print("All roots:", tat_ca_nghiem)
+
+# Keep only real roots using .is_real
+nghiem_thuc = [n for n in tat_ca_nghiem if n.is_real]
+print("Real roots:", nghiem_thuc)
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,caption={Kết quả}]
+All roots: [2, -1 - sqrt(3)*I, -1 + sqrt(3)*I]
+Real roots: [2]
+\end{lstlisting}
+
+\begin{infobox}
+Dòng \texttt{[n for n in tat\_ca\_nghiem if n.is\_real]} là một
+\textbf{list comprehension} (cú pháp rút gọn Python): duyệt qua từng
+nghiệm \texttt{n}, chỉ giữ lại nghiệm mà \texttt{n.is\_real} trả về
+\texttt{True}. Thuộc tính \texttt{.is\_real} là một trong nhiều
+``thuộc tính suy luận'' (assumptions) SymPy tự động gắn cho mỗi biểu
+thức: có thể trả về \texttt{True}, \texttt{False}, hoặc \texttt{None}
+(nếu SymPy chưa đủ thông tin kết luận).
+\end{infobox}
+
+\section{Ví dụ phức tạp hơn -- ba số hạng có tích và tổng}
+
+\begin{lstlisting}[caption={Bài toán: tổng và tích ba số hạng liên tiếp}]
+u1, q = sp.symbols('u1 q', real=True)
+
+# Given: u1 + u2 + u3 = 14  and  u1 * u2 * u3 = 64
+pt1 = sp.Eq(u1 + u1*q + u1*q**2, 14)
+pt2 = sp.Eq(u1 * (u1*q) * (u1*q**2), 64)
+
+tap_nghiem = sp.nonlinsolve([pt1, pt2], [u1, q])
+print(tap_nghiem)
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,caption={Kết quả (rút gọn)}]
+{(2, 2), (8, 1/2)}
+\end{lstlisting}
+
+\section{Rút gọn nghiệm phức tạp với \texttt{simplify()}}
+
+\begin{lstlisting}[caption={Rút gọn biểu thức nghiệm}]
+bt_phuc_tap = (u1**2 * q**2 - u1**2 * q**0) / (u1 * q - u1)
+print("Before:", bt_phuc_tap)
+print("After: ", sp.simplify(bt_phuc_tap))
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,caption={Kết quả}]
+Before: (u1**2*q**2 - u1**2)/(u1*q - u1)
+After:  u1*(q + 1)
+\end{lstlisting}
+
+\begin{exbox}
+\textbf{Bài tập 4.1.} Cho CSN thỏa $u_1 + u_3 = 20$ và $u_2 + u_4 = 40$.
+Tìm $u_1, q$.\\[2pt]
+\textbf{Bài tập 4.2.} Cho CSN có $u_2 = 6$ và $u_5 = 162$. Tìm $u_1$ và
+$q$.\\[2pt]
+\textbf{Bài tập 4.3.} Cho 3 số hạng liên tiếp có tổng bằng 21 và tích
+bằng 216. Tìm ba số đó.\\[2pt]
+\textbf{Bài tập 4.4.} Giải phương trình $q^4 - 5q^2 + 4 = 0$ và lọc
+nghiệm thực dương.
+\end{exbox}
+
+\newpage
+
+% =====================================================================
+\chapter{Dạng toán 3 -- Cấp số nhân lùi vô hạn và giới hạn}
+
+\section{Nhắc lại lý thuyết}
+
+Khi $|q| < 1$, các số hạng của cấp số nhân càng lúc càng nhỏ dần về 0,
+và tổng $S_n$ tiến dần đến một giá trị giới hạn hữu hạn $S$ khi
+$n \to \infty$:
+\[
+S = u_1 + u_1 q + u_1 q^2 + \cdots = \frac{u_1}{1 - q}.
+\]
+
+\section{Tính giới hạn bằng \texttt{limit()}}
+
+\begin{syntaxbox}{sp.limit(bieu\_thuc, bien, gia\_tri\_tien\_toi)}
+Tính \textbf{giới hạn} của \texttt{bieu\_thuc} khi \texttt{bien} tiến
+tới \texttt{gia\_tri\_tien\_toi}. Để biểu diễn ``tiến tới vô cùng'',
+SymPy dùng ký hiệu \texttt{sp.oo} (đọc là \emph{infinity}, ký hiệu
+$\infty$).
+\end{syntaxbox}
+
+\begin{lstlisting}[caption={Tính tổng CSN lùi vô hạn bằng limit}]
+import sympy as sp
+sp.init_printing()
+
+u1, q, n = sp.symbols('u1 q n', real=True)
+Sn_formula = u1 * (1 - q**n) / (1 - q)
+
+# Limit of S_n as n -> infinity
+S_vo_han = sp.limit(Sn_formula, n, sp.oo)
+print(S_vo_han)
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,numbers=none]
+zoo
+\end{lstlisting}
+
+\begin{warnbox}
+Kết quả \texttt{zoo} xuất hiện vì SymPy \textbf{chưa biết} $q$ thỏa
+điều kiện $|q| < 1$ -- về mặt toán học thuần túy, nếu $q$ có thể là
+bất kỳ số thực nào (kể cả $q > 1$), giới hạn không tồn tại hữu hạn. Ta
+cần \textbf{thay $q$ bằng giá trị cụ thể} trong khoảng $(-1, 1)$ trước
+khi lấy giới hạn.
+\end{warnbox}
+
+\begin{lstlisting}[caption={Thay q cụ thể rồi lấy giới hạn}]
+u1 = sp.symbols('u1', real=True)
+q = sp.symbols('q', real=True)
+n = sp.symbols('n')
+
+Sn_formula = u1 * (1 - q**n) / (1 - q)
+
+# Example: q = 1/2 (|q| < 1 guaranteed)
+Sn_vi_du = Sn_formula.subs(q, sp.Rational(1, 2))
+S_vo_han_vi_du = sp.limit(Sn_vi_du, n, sp.oo)
+print("With q = 1/2, S =", S_vo_han_vi_du)
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,numbers=none]
+With q = 1/2, S = 2*u1
+\end{lstlisting}
+
+\begin{infobox}
+Kết quả $S = 2u_1$ khớp chính xác với công thức lý thuyết
+$S = \dfrac{u_1}{1-q} = \dfrac{u_1}{1 - 1/2} = 2u_1$. Trong thực hành,
+cách \textbf{đơn giản và an toàn nhất} là sau khi tự kiểm tra bằng tay
+điều kiện $|q| < 1$ đúng theo đề bài, áp dụng thẳng công thức
+$S = \dfrac{u_1}{1-q}$ (không cần gọi \texttt{limit()} nữa) -- hàm
+\texttt{limit()} chủ yếu giúp \textbf{kiểm chứng} công thức xuất phát
+từ định nghĩa toán học.
+\end{infobox}
+
+\section{Hàm tổng quát tính tổng CSN lùi vô hạn}
+
+\begin{lstlisting}[caption={Hàm kiểm tra điều kiện và tính tổng}]
+def tong_CSN_lui_vo_han(u1_val, q_val):
+    """Compute S = u1/(1-q), requires |q| < 1."""
+    if abs(q_val) >= 1:
+        raise ValueError(
+            f"No finite sum since |q|={abs(q_val)} >= 1"
+        )
+    u1s, qs = sp.symbols('u1 q')
+    return (u1s / (1 - qs)).subs({u1s: u1_val, qs: q_val})
+
+print(tong_CSN_lui_vo_han(4, sp.Rational(1, 3)))   # result: 6
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,numbers=none]
+6
+\end{lstlisting}
+
+\section{Ví dụ tổng hợp -- bài toán chữ}
+
+\begin{lstlisting}[caption={Tính tổng chuỗi hình học hội tụ}]
+# S = 1 + 1/2 + 1/4 + 1/8 + ...
+print(tong_CSN_lui_vo_han(1, sp.Rational(1, 2)))   # 2
+
+# S = 3 - 1 + 1/3 - 1/9 + ...
+print(tong_CSN_lui_vo_han(3, sp.Rational(-1, 3)))  # 9/4
+\end{lstlisting}
+
+\begin{exbox}
+\textbf{Bài tập 5.1.} Tính $S = 5 + \tfrac{5}{4} + \tfrac{5}{16} +
+\cdots$.\\[2pt]
+\textbf{Bài tập 5.2.} Viết hàm kiểm tra một số $x$ có phải là công bội
+hợp lệ cho CSN lùi vô hạn hay không.\\[2pt]
+\textbf{Bài tập 5.3.} Cho $S = 8$ và $u_1 = 2$. Tìm $q$ (biết
+$|q| < 1$).
+\end{exbox}
+
+\newpage
+
+% =====================================================================
+\chapter{Ứng dụng thực tế}
+
+\section{Bài toán lãi suất kép}
+
+Nếu gửi số tiền gốc $A$ với lãi suất $r$ mỗi kỳ, số dư sau $n$ kỳ tạo
+thành một cấp số nhân với công bội $q = (1+r)$:
+\[
+T_n = A (1 + r)^n.
+\]
+
+\begin{lstlisting}[caption={Tính số dư sau n năm gửi tiết kiệm lãi kép}]
+A, r, n = sp.symbols('A r n', positive=True)
+
+# Balance after n periods at rate r per period
+so_du = A * (1 + r)**n
+
+# Deposit 100 million, 6%/year, after 10 years
+so_du_thuc_te = so_du.subs({A: 100_000_000, r: sp.Rational(6, 100), n: 10})
+print("Rounded (VND):", round(float(so_du_thuc_te.evalf()), 0))
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,numbers=none]
+Rounded (VND): 179084769.0
+\end{lstlisting}
+
+\begin{infobox}
+Cột mốc thời gian $n$ đóng vai trò giống hệt chỉ số số hạng trong cấp
+số nhân đã học, còn $(1+r)$ đóng vai trò công bội $q$. Việc ``nhận ra''
+một bài toán thực tế có bản chất là cấp số nhân (dân số tăng theo tỉ lệ
+\% cố định, vi khuẩn nhân đôi sau mỗi giờ, khấu hao tài sản theo tỉ lệ
+\% mỗi năm, \dots) chính là bước quan trọng nhất -- sau đó chỉ cần áp
+dụng lại đúng \texttt{subs()}, \texttt{evalf()} đã học ở Dạng 1.
+\end{infobox}
+
+\section{So sánh lãi đơn và lãi kép}
+
+\begin{lstlisting}[caption={So sánh lãi đơn (cấp số cộng) và lãi kép (cấp số nhân)}]
+A, r, n = sp.symbols('A r n', positive=True)
+
+lai_don = A * (1 + n * r)         # simple interest
+lai_kep = A * (1 + r)**n          # compound interest
+
+# Compare after 20 years with A = 100, r = 5%/year
+A_val, r_val, n_val = 100, sp.Rational(5, 100), 20
+print("Simple:  ", lai_don.subs({A: A_val, r: r_val, n: n_val}))
+print("Compound:", lai_kep.subs({A: A_val, r: r_val, n: n_val}).evalf(6))
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,caption={Kết quả}]
+Simple:   200
+Compound: 265.330
+\end{lstlisting}
+
+\section{Bài toán tăng trưởng vi khuẩn}
+
+\begin{lstlisting}[caption={So sánh tăng trưởng vi khuẩn với hai tốc độ}]
+u1_val = 100    # initial 100 bacteria
+q1 = sp.Rational(3, 2)   # +50% per hour
+q2 = 2                   # doubles per hour
+
+u1s, qs, ns = sp.symbols('u1 q n')
+cong_thuc = u1s * qs**(ns - 1)
+
+for gio in range(1, 6):
+    sl1 = cong_thuc.subs({u1s: u1_val, qs: q1, ns: gio})
+    sl2 = cong_thuc.subs({u1s: u1_val, qs: q2, ns: gio})
+    print(f"Hour {gio}: +50% -> {sl1},  doubled -> {sl2}")
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,caption={Kết quả (rút gọn)}]
+Hour 1: +50% -> 100,   doubled -> 100
+Hour 2: +50% -> 150,   doubled -> 200
+Hour 3: +50% -> 225,   doubled -> 400
+Hour 4: +50% -> 675/2, doubled -> 800
+Hour 5: +50% -> 5063/8, doubled -> 1600
+\end{lstlisting}
+
+\section{Bài toán dân số}
+
+% ====== ĐÃ SỬA LỖI TẠI ĐÂY ======
+% Dấu % trong caption phải được escape thành \%
+\begin{lstlisting}[caption={Dự báo dân số với tỉ lệ tăng 1.5\%/năm}]
+u1s, qs, ns = sp.symbols('u1 q n')
+cong_thuc = u1s * qs**(ns - 1)
+
+# Year 2025: 2 million, growth 1.5%/year, predict 2040
+ket_qua = cong_thuc.subs({u1s: 2, qs: sp.Rational(15, 1000) + 1, ns: 15})
+print("Population 2040 (million):", ket_qua.evalf(6))
+\end{lstlisting}
+
+\begin{lstlisting}[style=outstyle,numbers=none]
+Population 2040 (million): 2.48454
+\end{lstlisting}
+
+\begin{exbox}
+\textbf{Bài tập 6.1.} Gửi ngân hàng 500 triệu với lãi kép 7\%/năm. Sau
+15 năm, số dư là bao nhiêu?\\[2pt]
+\textbf{Bài tập 6.2.} Một tài sản trị giá 1 tỉ đồng khấu hao 12\%/năm.
+Sau 8 năm giá trị còn bao nhiêu?\\[2pt]
+\textbf{Bài tập 6.3.} Một quần thể vi khuẩn ban đầu có 200 con, sau 6
+giờ có 12800 con. Tính công bội $q$ mỗi giờ.
+\end{exbox}
+
+\newpage
+
+% =====================================================================
+\chapter{Trực quan hóa với Matplotlib}
+
+\section{Vẽ đồ thị so sánh các cấp số nhân}
+
+\begin{lstlisting}[caption={Vẽ đồ thị so sánh các CSN với q khác nhau}]
+import matplotlib.pyplot as plt
+import sympy as sp
+
+u1s, qs, ns = sp.symbols('u1 q n')
+cong_thuc = u1s * qs**(ns - 1)
+
+# Convert symbolic expression to fast numeric function
+f = sp.lambdify((u1s, qs, ns), cong_thuc, 'numpy')
+
+so_hang = list(range(1, 11))     # n = 1..10
+danh_sach_q = [0.5, 1.2, 1.5, 2] # multiple ratios
+
+plt.figure(figsize=(8, 5))
+for q_val in danh_sach_q:
+    gia_tri = [f(10, q_val, n_val) for n_val in so_hang]
+    plt.plot(so_hang, gia_tri, marker='o', label=f"q = {q_val}")
+
+plt.xlabel("Term index n")
+plt.ylabel("Value u_n (with u1 = 10)")
+plt.title("Growth comparison of geometric progressions")
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.5)
+plt.tight_layout()
+plt.savefig("growth_chart_example.png", dpi=150)
+plt.show()
+\end{lstlisting}
+
+\begin{syntaxbox}{sp.lambdify(bien, bieu\_thuc, 'numpy')}
+Chuyển một \textbf{biểu thức ký hiệu SymPy} thành một \textbf{hàm số
+Python bình thường}, tính toán bằng số rất nhanh (dựa trên
+\texttt{numpy}) -- hữu ích khi cần tính hàng trăm/nghìn giá trị để vẽ
+đồ thị, vì gọi \texttt{.subs()} lặp lại nhiều lần sẽ chậm hơn đáng kể.
+\end{syntaxbox}
+
+\section{Đồ thị hàm mũ liên tục và dãy rời rạc}
+
+\begin{lstlisting}[caption={So sánh dãy rời rạc và hàm mũ liên tục}]
+import numpy as np
+import matplotlib.pyplot as plt
+
+q = 2
+u1 = 1
+
+# Discrete points
+n_int = np.arange(1, 9)
+u_int = [u1 * q**(k - 1) for k in n_int]
+
+# Continuous exponential curve
+x_cont = np.linspace(1, 8, 200)
+y_cont = u1 * q**(x_cont - 1)
+
+plt.figure(figsize=(8, 5))
+plt.plot(x_cont, y_cont, '--', color='gray',
+         label=r'Continuous $y = 2^{x-1}$')
+plt.scatter(n_int, u_int, color='red', s=60, zorder=3,
+            label=r'Discrete terms $u_n$')
+plt.xlabel('n')
+plt.ylabel('u_n')
+plt.title('Geometric progression as a discrete exponential function')
+plt.legend()
+plt.grid(alpha=0.3)
+plt.show()
+\end{lstlisting}
+
+\begin{tipbox}
+Ba yếu tố \textbf{bắt buộc} của một đồ thị minh họa: \texttt{xlabel}
+(nhãn trục hoành), \texttt{ylabel} (nhãn trục tung), \texttt{legend}
+(chú thích phân biệt các đường), cùng \texttt{title} (tiêu đề) -- giúp
+người xem hiểu ngay đồ thị biểu diễn điều gì mà không cần đọc lại code.
+\end{tipbox}
+
+\begin{infobox}
+Quan sát đồ thị sẽ thấy: chỉ cần $q$ nhích từ $1.2$ lên $2$, độ chênh
+lệch giữa các đường cong tăng \textbf{rất nhanh} sau vài số hạng --
+đây chính là bản chất tăng trưởng theo cấp số nhân (exponential
+growth), khác hẳn tăng trưởng đều (cấp số cộng).
+\end{infobox}
+
+\begin{exbox}
+\textbf{Bài tập 7.1.} Vẽ đồ thị $u_n$ cho $u_1 = 100$, $q$ lần lượt
+$0.9, 1.0, 1.1$ trong khoảng $n = 1..15$.\\[2pt]
+\textbf{Bài tập 7.2.} Vẽ đồ thị so sánh số dư lãi kép và lãi đơn theo
+$n = 1..30$ với $A = 100, r = 5\%$.
+\end{exbox}
+
+\newpage
+
+% =====================================================================
+\chapter{Đóng gói thành thư viện -- từ Notebook đến \texttt{.py}}
+
+Sau khi các đoạn mã trong Notebook đã chạy đúng, bước cuối cùng là gom
+các hàm lại thành một file Python độc lập, có thể \texttt{import} và tái
+sử dụng ở bất kỳ dự án nào khác.
+
+\section{Module \texttt{solver.py} hoàn chỉnh}
+
+\begin{lstlisting}[caption={geometric\_progression\_solver.py -- đóng gói hàm}]
+"""
+Solver module for geometric progression using SymPy.
+Provides: compute u_n, S_n, infinite sum, solve system for u1, q.
+"""
+import sympy as sp
+
+
+def tinh_un(u1_val, q_val, n_val):
+    """Return u_n = u1 * q^(n-1)."""
+    u1s, qs, ns = sp.symbols('u1 q n')
+    return (u1s * qs**(ns - 1)).subs({u1s: u1_val, qs: q_val, ns: n_val})
+
+
+def tinh_Sn(u1_val, q_val, n_val):
+    """Return S_n; handles the special case q = 1."""
+    if q_val == 1:
+        return n_val * u1_val
+    u1s, qs, ns = sp.symbols('u1 q n')
+    ct = u1s * (1 - qs**ns) / (1 - qs)
+    return ct.subs({u1s: u1_val, qs: q_val, ns: n_val})
+
+
+def tong_lui_vo_han(u1_val, q_val):
+    """Return S = u1/(1-q), requires |q| < 1."""
+    if abs(q_val) >= 1:
+        raise ValueError("Not convergent: need |q| < 1")
+    u1s, qs = sp.symbols('u1 q')
+    return (u1s / (1 - qs)).subs({u1s: u1_val, qs: q_val})
+
+
+def giai_he_tim_u1_q(pt1, pt2, chi_lay_nghiem_thuc=True):
+    """Solve 2 equations (sp.Eq) for (u1, q). Returns list of solutions."""
+    u1, q = sp.symbols('u1 q', real=chi_lay_nghiem_thuc)
+    nghiem = sp.solve([pt1, pt2], [u1, q])
+    return nghiem
+\end{lstlisting}
+
+\section{File kiểm thử \texttt{test\_solver.py}}
+
+\begin{lstlisting}[caption={test\_solver.py -- kiểm thử đơn giản}]
+from geometric_progression_solver import tinh_un, tinh_Sn, tong_lui_vo_han
+import sympy as sp
+
+
+def test_tinh_un():
+    # u1 = 3, q = 2 -> u5 = 3 * 2^4 = 48
+    assert tinh_un(3, 2, 5) == 48
+    # u1 = 1, q = 1/2, n = 5 -> u5 = 1/16
+    assert tinh_un(1, sp.Rational(1, 2), 5) == sp.Rational(1, 16)
+
+
+def test_tinh_Sn_q_khac_1():
+    # u1 = 3, q = 2 -> S6 = 189
+    assert tinh_Sn(3, 2, 6) == 189
+
+
+def test_tinh_Sn_q_bang_1():
+    # q = 1 -> Sn = n * u1
+    assert tinh_Sn(5, 1, 10) == 50
+
+
+def test_tong_lui_vo_han():
+    # u1 = 4, q = 1/2 -> S = 8
+    assert tong_lui_vo_han(4, sp.Rational(1, 2)) == 8
+
+
+if __name__ == "__main__":
+    test_tinh_un()
+    test_tinh_Sn_q_khac_1()
+    test_tinh_Sn_q_bang_1()
+    test_tong_lui_vo_han()
+    print("All tests PASSED!")
+\end{lstlisting}
+
+\begin{tipbox}
+Chạy file kiểm thử bằng \texttt{python test\_solver.py}, hoặc chuyên
+nghiệp hơn bằng \texttt{pytest} (cài qua \texttt{pip install pytest}
+rồi chạy \texttt{pytest test\_solver.py}).
+\end{tipbox}
+
+\newpage
+
+% =====================================================================
+\chapter*{Kết luận}
+\addcontentsline{toc}{chapter}{Kết luận}
+
+\section*{Tổng kết hành trình}
+\addcontentsline{toc}{section}{Tổng kết hành trình}
+
+Qua 9 chương của tài liệu, chúng ta đã đi từ những bước cài đặt môi
+trường đơn giản nhất đến việc đóng gói hoàn chỉnh một module Python có
+thể tái sử dụng cho việc giải toán cấp số nhân. Điểm then chốt cần ghi
+nhớ:
+
+\begin{enumerate}
+  \item \textbf{Ký hiệu hóa} các biến bằng \texttt{symbols()} là bước
+  đầu tiên để SymPy hiểu bài toán.
+  \item \textbf{\texttt{subs()} và \texttt{evalf()}} là công cụ chính
+  cho Dạng 1 (thay số tính toán).
+  \item \textbf{\texttt{Eq()}, \texttt{solve()}, \texttt{nonlinsolve()}}
+  giúp giải hệ phương trình tìm $u_1, q$ -- kèm việc \emph{lọc nghiệm
+  thực}.
+  \item \textbf{\texttt{limit()}} tự động hóa việc tính tổng lùi vô
+  hạn mà không cần nhớ công thức.
+  \item \textbf{Matplotlib} giúp trực quan hóa tốc độ tăng trưởng --
+  kỹ năng quan trọng khi trình bày bài toán ứng dụng.
+  \item \textbf{Đóng gói hàm} giúp chương trình tái sử dụng và kiểm
+  thử được.
+\end{enumerate}
+
+\section*{Đánh giá hiệu quả}
+\addcontentsline{toc}{section}{Đánh giá hiệu quả}
+
+SymPy giúp giải quyết bài toán cấp số nhân theo đúng \textbf{ba lớp độ
+khó tăng dần}: (1) thay số tính toán trực tiếp, (2) giải hệ phương trình
+tìm ẩn, và (3) mô hình hóa các bài toán thực tế phức tạp hơn (lãi kép,
+tăng trưởng, giới hạn). Việc giữ biểu thức ở dạng ký hiệu càng lâu càng
+tốt (chỉ ``chốt'' về số thập phân ở bước cuối bằng \texttt{.evalf()})
+giúp tránh sai số tích lũy và cho phép tái sử dụng công thức cho nhiều
+bài tập khác nhau chỉ bằng một dòng \texttt{.subs()}.
+
+\section*{Lưu ý và hạn chế}
+\addcontentsline{toc}{section}{Lưu ý và hạn chế}
+
+\begin{itemize}
+  \item Hệ phương trình bậc cao có thể cho \textbf{nhiều nghiệm} (kể cả
+  nghiệm phức) -- luôn cần đối chiếu với điều kiện thực tế của đề bài.
+  \item Luôn xử lý riêng trường hợp $q = 1$ khi tính $S_n$ để tránh lỗi
+  chia cho 0.
+  \item Với cấp số nhân lùi vô hạn, phải tự đảm bảo điều kiện $|q| < 1$
+  trước khi áp dụng công thức $S = \dfrac{u_1}{1-q}$.
+  \item Nên dùng \texttt{sp.Rational()} thay vì số thập phân Python
+  thường trong suốt quá trình tính toán, chỉ chuyển sang
+  \texttt{.evalf()} ở bước trình bày kết quả cuối.
+  \item \texttt{solve()} đôi khi bỏ sót nghiệm của hệ bậc cao -- cần
+  đối chiếu với \texttt{nonlinsolve()}.
+\end{itemize}
+
+\section*{Hướng mở rộng}
+\addcontentsline{toc}{section}{Hướng mở rộng}
+
+\begin{itemize}
+  \item Viết giao diện dòng lệnh (CLI) bằng \texttt{argparse} để chạy
+  trực tiếp từ Terminal.
+  \item Xây dựng web app bằng \texttt{Streamlit} để người dùng nhập đề
+  bài và nhận lời giải.
+  \item Bổ sung tính năng xuất lời giải ra LaTeX/PDF.
+  \item Mở rộng sang cấp số cộng, dãy truy hồi, hoặc các dạng toán khác.
+\end{itemize}
+
+\section*{Tài liệu tham khảo}
+\addcontentsline{toc}{section}{Tài liệu tham khảo}
+
+\begin{enumerate}
+  \item Sách giáo khoa Đại số và Giải tích -- Chuyên đề Dãy số, Cấp số
+  cộng, Cấp số nhân (chương trình phổ thông Việt Nam).
+  \item Tài liệu chính thức của SymPy: \url{https://docs.sympy.org}
+  \item Tài liệu chính thức của Matplotlib: \url{https://matplotlib.org}
+  \item Tài liệu Jupyter Notebook: \url{https://jupyter.org/documentation}
+\end{enumerate}
+
+% =====================================================================
+\appendix
+
+\chapter{Bảng tra cứu nhanh các lệnh SymPy}
+
+\begin{longtable}{@{}p{4.2cm}p{4.2cm}p{6cm}@{}}
+\toprule
+\textbf{Lệnh} & \textbf{Cú pháp} & \textbf{Ý nghĩa}\\
+\midrule
+\endhead
+Khai báo biến & \texttt{sp.symbols('x y')} & Tạo đối tượng ký hiệu\\
+Biến có điều kiện & \texttt{sp.symbols('q', real=True)} & Ràng buộc miền giá trị\\
+In đẹp & \texttt{sp.init\_printing()} & Output dạng LaTeX/Unicode\\
+Thay giá trị & \texttt{expr.subs(\{x: 1\})} & Thay biến bằng giá trị\\
+Số thực hóa & \texttt{expr.evalf(15)} & Chuyển sang số thập phân\\
+Phân số chính xác & \texttt{sp.Rational(1, 2)} & Tạo phân số $\tfrac12$\\
+Rút gọn & \texttt{sp.simplify(expr)} & Tối giản biểu thức\\
+Khai triển & \texttt{sp.expand(expr)} & Mở ngoặc\\
+Nhân tử & \texttt{sp.factor(expr)} & Phân tích thành nhân tử\\
+Phương trình & \texttt{sp.Eq(A, B)} & Tạo phương trình $A = B$\\
+Giải PT & \texttt{sp.solve(pt, x)} & Giải phương trình theo $x$\\
+Giải hệ & \texttt{sp.solve([pt1, pt2], [x, y])} & Giải hệ phương trình\\
+Hệ phi tuyến & \texttt{sp.nonlinsolve([...], [...])} & Giải hệ phi tuyến\\
+Giới hạn & \texttt{sp.limit(expr, n, sp.oo)} & Giới hạn khi $n \to \infty$\\
+Vô cùng & \texttt{sp.oo} & Ký hiệu $\infty$\\
+Số ảo & \texttt{sp.I} & Đơn vị ảo $i$\\
+Kiểm tra thực & \texttt{expr.is\_real} & True/False/None\\
+Hàm số hóa & \texttt{sp.lambdify(x, expr)} & Chuyển sang hàm số nhanh\\
+\bottomrule
+\end{longtable}
+
+\chapter{Một số lỗi thường gặp và cách khắc phục}
+
+\begin{enumerate}
+  \item \textbf{Lỗi \texttt{ZeroDivisionError} khi $q = 1$:}\\
+  Nguyên nhân: công thức $S_n$ có mẫu $(1 - q)$.\\
+  Cách xử lý: kiểm tra \texttt{if q == 1} trước khi áp dụng công thức.
+
+  \item \textbf{Kết quả chứa \texttt{I} (số ảo) dù đề yêu cầu thực:}\\
+  Nguyên nhân: SymPy giải trên trường số phức.\\
+  Cách xử lý: khai báo \texttt{symbols('q', real=True)} hoặc lọc
+  \texttt{not expr.has(sp.I)}.
+
+  \item \textbf{Kết quả là biểu thức quá phức tạp:}\\
+  Nguyên nhân: SymPy chưa rút gọn.\\
+  Cách xử lý: gọi \texttt{sp.simplify(expr)}.
+
+  \item \textbf{Sai số khi dùng \texttt{float}:}\\
+  Nguyên nhân: \texttt{1/3} trong Python là \texttt{0.3333...} (số thực
+  nhị phân).\\
+  Cách xử lý: dùng \texttt{sp.Rational(1, 3)} thay vì \texttt{1/3}.
+
+  \item \textbf{\texttt{solve()} không trả về nghiệm nào dù có nghiệm:}\\
+  Nguyên nhân: hệ phi tuyến bậc cao.\\
+  Cách xử lý: chuyển sang \texttt{nonlinsolve()}.
+
+  \item \textbf{\texttt{limit()} trả về \texttt{zoo}:}\\
+  Nguyên nhân: SymPy chưa biết điều kiện hội tụ $|q| < 1$.\\
+  Cách xử lý: thay $q$ bằng giá trị cụ thể trong $(-1, 1)$ trước khi
+  lấy giới hạn.
+
+  \item \textbf{Nhầm lẫn giữa \texttt{=} và \texttt{==}:}\\
+  Nguyên nhân: nhầm gán giá trị với so sánh.\\
+  Cách xử lý: dùng \texttt{=} để gán biến; dùng \texttt{sp.Eq()} để
+  biểu diễn phương trình.
+\end{enumerate}
+
+\chapter{Bài tập tổng hợp}
+
+\section*{A. Dạng cơ bản (thay số)}
+
+\begin{enumerate}
+  \item Cho CSN có $u_1 = 4, q = 3$. Tìm $u_8$ và $S_8$.
+  \item Cho $u_1 = 1, q = \tfrac{2}{3}$. Tính $S_{15}$ dạng phân số.
+  \item Cho $u_1 = 1000, q = 1.02$. Sau 20 kỳ, $u_{20}$ là bao nhiêu?
+\end{enumerate}
+
+\section*{B. Dạng trung bình (giải hệ)}
+
+\begin{enumerate}
+  \setcounter{enumi}{3}
+  \item Cho CSN thỏa $u_1 + u_3 = 30$ và $u_2 + u_4 = 60$. Tìm $u_1, q$.
+  \item Cho CSN có $u_3 = 12$ và $u_6 = 96$. Tìm $u_1, q$.
+  \item Ba số hạng liên tiếp của CSN có tổng bằng 14 và tổng nghịch đảo
+  bằng $\tfrac{7}{8}$. Tìm ba số đó.
+\end{enumerate}
+
+\section*{C. Dạng nâng cao (ứng dụng)}
+
+\begin{enumerate}
+  \setcounter{enumi}{6}
+  \item Gửi ngân hàng 200 triệu, lãi kép 8\%/năm. Sau 12 năm, số dư là
+  bao nhiêu? Vẽ đồ thị tăng trưởng.
+  \item Một quần thể thỏ ban đầu có 50 con, tăng trưởng 20\% mỗi năm.
+  Dự báo số lượng sau 10 năm.
+  \item Chứng minh bằng SymPy: nếu $u_k^2 = u_{k-1} \cdot u_{k+1}$ thì
+  dãy $(u_n)$ là cấp số nhân.
+  \item Viết hàm Python trả về $u_1, q$ khi cho trước $u_m, u_n, m, n$
+  (bài toán tổng quát tìm CSN khi biết hai số hạng).
+\end{enumerate}
+
+\end{document}
